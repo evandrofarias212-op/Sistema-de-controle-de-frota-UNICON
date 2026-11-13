@@ -1,0 +1,2 @@
+ALTER TABLE usuarios
+    ADD COLUMN equipe VARCHAR(20) NULL;
