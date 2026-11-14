@@ -1,0 +1,23 @@
+CREATE TABLE abastecimentos (
+    id             BIGINT         NOT NULL AUTO_INCREMENT,
+    veiculo_id     BIGINT         NOT NULL,
+    lancado_por    BIGINT         NOT NULL,
+    abastecido_em  DATETIME       NOT NULL,
+    km             INT            NOT NULL,
+    combustivel    VARCHAR(20)    NOT NULL,
+    litros         DECIMAL(8,2)   NOT NULL,
+    valor          DECIMAL(10,2)  NOT NULL,
+    posto          VARCHAR(80)    NULL,
+    observacao     VARCHAR(500)   NULL,
+    foto_vale_id   BIGINT         NOT NULL,
+    foto_bomba_id  BIGINT         NOT NULL,
+    foto_km_id     BIGINT         NOT NULL,
+    criado_em      DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_abast_veiculo FOREIGN KEY (veiculo_id)    REFERENCES veiculos (id),
+    CONSTRAINT fk_abast_usuario FOREIGN KEY (lancado_por)   REFERENCES usuarios (id),
+    CONSTRAINT fk_abast_vale    FOREIGN KEY (foto_vale_id)  REFERENCES arquivos (id),
+    CONSTRAINT fk_abast_bomba   FOREIGN KEY (foto_bomba_id) REFERENCES arquivos (id),
+    CONSTRAINT fk_abast_km      FOREIGN KEY (foto_km_id)    REFERENCES arquivos (id),
+    INDEX idx_abast_veiculo_data (veiculo_id, abastecido_em)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
