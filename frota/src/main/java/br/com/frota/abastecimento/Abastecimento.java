@@ -51,6 +51,15 @@ public class Abastecimento {
     @Column(name = "foto_km_id", nullable = false, updatable = false)
     private Long fotoKmId;
 
+    @Column(name = "anulado_em")
+    private LocalDateTime anuladoEm;
+
+    @Column(name = "anulado_por")
+    private Long anuladoPor;
+
+    @Column(name = "motivo_anulacao", length = 300)
+    private String motivoAnulacao;
+
     @Column(name = "criado_em", nullable = false, updatable = false)
     private LocalDateTime criadoEm;
 
@@ -80,6 +89,18 @@ public class Abastecimento {
         this.fotoBombaId = fotoBombaId;
         this.fotoKmId = fotoKmId;
     }
+
+    /** Anula o lançamento (não apaga): fica marcado, com motivo e quem anulou. */
+    public void anular(Long usuarioId, String motivo) {
+        this.anuladoEm = LocalDateTime.now();
+        this.anuladoPor = usuarioId;
+        this.motivoAnulacao = motivo;
+    }
+
+    public boolean isAnulado() { return anuladoEm != null; }
+    public LocalDateTime getAnuladoEm() { return anuladoEm; }
+    public Long getAnuladoPor() { return anuladoPor; }
+    public String getMotivoAnulacao() { return motivoAnulacao; }
 
     public Long getId() { return id; }
     public Long getVeiculoId() { return veiculoId; }

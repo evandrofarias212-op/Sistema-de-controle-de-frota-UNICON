@@ -125,6 +125,17 @@ public class AbastecimentoService {
                 porEquipe, linhas);
     }
 
+    /** Anula um lançamento errado. Não volta o km do veículo (isso é corrigido na edição do veículo). */
+    @Transactional
+    public AbastecimentoResponse anular(Long id, String motivo, Long usuarioId) {
+        Abastecimento a = repository.findById(id).orElseThrow(this::naoEncontrado);
+        if (a.isAnulado()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Esse abastecimento já foi anulado");
+        }
+        a.anular(usuarioId, motivo.trim());
+        return respostas(List.of(a)).get(0);
+    }
+
     // ---------- internos ----------
 
     private void validarFotos(AbastecimentoRequest r, Long usuarioId, boolean gestor) {

@@ -4,6 +4,7 @@ import br.com.frota.usuario.Equipe;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -34,6 +35,9 @@ public final class AbastecimentoDtos {
             @NotNull Long fotoKmId) {
     }
 
+    public record AnularRequest(@NotBlank @Size(min = 5, max = 300) String motivo) {
+    }
+
     // ---------- saída ----------
 
     public record AbastecimentoResponse(
@@ -53,14 +57,18 @@ public final class AbastecimentoDtos {
             Long fotoValeId,
             Long fotoBombaId,
             Long fotoKmId,
-            LocalDateTime criadoEm) {
+            LocalDateTime criadoEm,
+            boolean anulado,
+            LocalDateTime anuladoEm,
+            String motivoAnulacao) {
 
         public static AbastecimentoResponse de(Abastecimento a, String placa, String lancadoPorNome) {
             return new AbastecimentoResponse(a.getId(), a.getVeiculoId(), placa, a.getLancadoPor(), lancadoPorNome,
                     a.getAbastecidoEm(), a.getKm(), a.getCombustivel(), a.getLitros(), a.getValor(),
                     a.getValor().divide(a.getLitros(), 3, RoundingMode.HALF_UP),
                     a.getPosto(), a.getObservacao(),
-                    a.getFotoValeId(), a.getFotoBombaId(), a.getFotoKmId(), a.getCriadoEm());
+                    a.getFotoValeId(), a.getFotoBombaId(), a.getFotoKmId(), a.getCriadoEm(),
+                    a.isAnulado(), a.getAnuladoEm(), a.getMotivoAnulacao());
         }
     }
 

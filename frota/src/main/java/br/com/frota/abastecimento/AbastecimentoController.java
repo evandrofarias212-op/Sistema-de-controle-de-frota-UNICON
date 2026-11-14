@@ -2,6 +2,7 @@ package br.com.frota.abastecimento;
 
 import br.com.frota.abastecimento.AbastecimentoDtos.AbastecimentoRequest;
 import br.com.frota.abastecimento.AbastecimentoDtos.AbastecimentoResponse;
+import br.com.frota.abastecimento.AbastecimentoDtos.AnularRequest;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,14 @@ public class AbastecimentoController {
     @GetMapping("/{id}")
     public AbastecimentoResponse buscar(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) {
         return service.buscar(id, somenteDoTecnico(jwt));
+    }
+
+    /** Anula um lançamento errado (não apaga: fica marcado, com motivo e quem anulou). */
+    @PostMapping("/{id}/anular")
+    @PreAuthorize("hasAnyRole('ADMIN','SUPERVISOR')")
+    public AbastecimentoResponse anular(@PathVariable Long id, @Valid @RequestBody AnularRequest request,
+                                        @AuthenticationPrincipal Jwt jwt) {
+        return service.anular(id, request.motivo(), jwt.<Long>getClaim("uid"));
     }
 
     private Long somenteDoTecnico(Jwt jwt) {

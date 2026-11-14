@@ -31,7 +31,8 @@ public interface AbastecimentoRepository extends JpaRepository<Abastecimento, Lo
     /** Quantos abastecimentos já usam alguma dessas fotos (impede reaproveitar a mesma foto). */
     @Query("""
             select count(a) from Abastecimento a
-            where a.fotoValeId in :ids or a.fotoBombaId in :ids or a.fotoKmId in :ids
+            where a.anuladoEm is null
+              and (a.fotoValeId in :ids or a.fotoBombaId in :ids or a.fotoKmId in :ids)
             """)
     long contarComFotos(@Param("ids") Collection<Long> ids);
 
@@ -40,6 +41,7 @@ public interface AbastecimentoRepository extends JpaRepository<Abastecimento, Lo
             select v.id, v.placa, v.equipe, count(a), sum(a.litros), sum(a.valor)
             from Abastecimento a, Veiculo v
             where a.veiculoId = v.id
+              and a.anuladoEm is null
               and (:de is null or a.abastecidoEm >= :de)
               and (:ate is null or a.abastecidoEm < :ate)
               and (:equipe is null or v.equipe = :equipe)
