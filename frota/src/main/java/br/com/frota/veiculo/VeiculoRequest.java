@@ -17,5 +17,6 @@ public record VeiculoRequest(
         @NotNull @Min(0) Integer kmAtual,
         @NotNull StatusVeiculo status,
         @NotNull Equipe equipe,
+        TipoVeiculo tipo,
         @Size(max = 2) List<Long> responsaveisIds) {
 }

@@ -17,6 +17,7 @@ public record VeiculoResponse(
         int kmAtual,
         StatusVeiculo status,
         Equipe equipe,
+        TipoVeiculo tipo,
         List<Responsavel> responsaveis,
         List<String> alertas,
         LocalDateTime criadoEm) {
@@ -31,13 +32,13 @@ public record VeiculoResponse(
                 .toList();
 
         List<String> alertas = new ArrayList<>();
-        if (v.getEquipe() == Equipe.FIBRA && responsaveis.size() < 2) {
+        if (v.getTipo() == TipoVeiculo.CARRO && v.getEquipe() == Equipe.FIBRA && responsaveis.size() < 2) {
             alertas.add("Carro da equipe FIBRA com menos de 2 técnicos");
         } else if (responsaveis.isEmpty() && v.getStatus() == StatusVeiculo.ATIVO) {
-            alertas.add("Carro ativo sem técnico responsável");
+            alertas.add("Veículo ativo sem técnico responsável");
         }
 
         return new VeiculoResponse(v.getId(), v.getPlaca(), v.getMarca(), v.getModelo(), v.getAno(),
-                v.getKmAtual(), v.getStatus(), v.getEquipe(), responsaveis, alertas, v.getCriadoEm());
+                v.getKmAtual(), v.getStatus(), v.getEquipe(), v.getTipo(), responsaveis, alertas, v.getCriadoEm());
     }
 }

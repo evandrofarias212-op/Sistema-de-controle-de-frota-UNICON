@@ -1,5 +1,6 @@
 package br.com.frota.vistoria;
 
+import br.com.frota.veiculo.TipoVeiculo;
 import jakarta.persistence.*;
 
 @Entity
@@ -25,6 +26,10 @@ public class ItemVistoria {
 
     @Column(nullable = false)
     private int ordem;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "aplica_a", nullable = false, length = 10)
+    private AplicaA aplicaA = AplicaA.AMBOS;
 
     protected ItemVistoria() {
         // exigido pelo JPA
@@ -52,4 +57,11 @@ public class ItemVistoria {
     public boolean isObrigatorio() { return obrigatorio; }
     public boolean isAtivo() { return ativo; }
     public int getOrdem() { return ordem; }
+    public AplicaA getAplicaA() { return aplicaA; }
+    public void setAplicaA(AplicaA aplicaA) { this.aplicaA = aplicaA; }
+
+    /** O item vale para esse tipo de veículo? */
+    public boolean aplicaAo(TipoVeiculo tipo) {
+        return aplicaA == AplicaA.AMBOS || aplicaA.name().equals(tipo.name());
+    }
 }

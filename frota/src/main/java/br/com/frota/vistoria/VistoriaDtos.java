@@ -48,15 +48,16 @@ public final class VistoriaDtos {
             @NotNull CategoriaItem categoria,
             @NotNull Boolean obrigatorio,
             @NotNull Boolean ativo,
-            @NotNull Integer ordem) {
+            @NotNull Integer ordem,
+            AplicaA aplicaA) {
     }
 
     // ---------- saída ----------
 
     public record ItemResponse(Long id, String nome, CategoriaItem categoria,
-                               boolean obrigatorio, boolean ativo, int ordem) {
+                               boolean obrigatorio, boolean ativo, int ordem, AplicaA aplicaA) {
         public static ItemResponse de(ItemVistoria i) {
-            return new ItemResponse(i.getId(), i.getNome(), i.getCategoria(), i.isObrigatorio(), i.isAtivo(), i.getOrdem());
+            return new ItemResponse(i.getId(), i.getNome(), i.getCategoria(), i.isObrigatorio(), i.isAtivo(), i.getOrdem(), i.getAplicaA());
         }
     }
 

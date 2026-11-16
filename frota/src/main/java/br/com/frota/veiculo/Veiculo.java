@@ -39,6 +39,10 @@ public class Veiculo {
     @Column(nullable = false, length = 20)
     private Equipe equipe;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private TipoVeiculo tipo = TipoVeiculo.CARRO;
+
     /** 1 ou 2 técnicos (dupla). */
     @ManyToMany
     @JoinTable(name = "veiculo_responsaveis",
@@ -82,6 +86,7 @@ public class Veiculo {
     public int getKmAtual() { return kmAtual; }
     public StatusVeiculo getStatus() { return status; }
     public Equipe getEquipe() { return equipe; }
+    public TipoVeiculo getTipo() { return tipo; }
     public Set<Usuario> getResponsaveis() { return responsaveis; }
     public LocalDateTime getCriadoEm() { return criadoEm; }
 
@@ -92,4 +97,5 @@ public class Veiculo {
     public void setKmAtual(int kmAtual) { this.kmAtual = kmAtual; }
     public void setStatus(StatusVeiculo status) { this.status = status; }
     public void setEquipe(Equipe equipe) { this.equipe = equipe; }
+    public void setTipo(TipoVeiculo tipo) { this.tipo = tipo; }
 }

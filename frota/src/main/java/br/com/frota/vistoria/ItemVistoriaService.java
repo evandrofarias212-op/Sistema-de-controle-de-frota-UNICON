@@ -30,6 +30,9 @@ public class ItemVistoriaService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe um item com esse nome");
         }
         ItemVistoria item = new ItemVistoria(nome, r.categoria(), r.obrigatorio(), r.ativo(), r.ordem());
+        if (r.aplicaA() != null) {
+            item.setAplicaA(r.aplicaA());
+        }
         return ItemResponse.de(repository.save(item));
     }
 
@@ -42,6 +45,9 @@ public class ItemVistoriaService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe um item com esse nome");
         }
         item.atualizar(nome, r.categoria(), r.obrigatorio(), r.ativo(), r.ordem());
+        if (r.aplicaA() != null) {
+            item.setAplicaA(r.aplicaA());
+        }
         return ItemResponse.de(item);
     }
 }

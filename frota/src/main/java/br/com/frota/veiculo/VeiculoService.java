@@ -55,6 +55,7 @@ public class VeiculoService {
         }
         Veiculo veiculo = new Veiculo(placa, request.marca().trim(), request.modelo().trim(),
                 request.ano(), request.kmAtual(), request.status(), request.equipe());
+        veiculo.setTipo(request.tipo() == null ? TipoVeiculo.CARRO : request.tipo());
         veiculo.trocarResponsaveis(buscarResponsaveis(request.responsaveisIds()));
         return VeiculoResponse.de(repository.save(veiculo));
     }
@@ -79,6 +80,9 @@ public class VeiculoService {
         veiculo.setKmAtual(request.kmAtual());
         veiculo.setStatus(request.status());
         veiculo.setEquipe(request.equipe());
+        if (request.tipo() != null) {
+            veiculo.setTipo(request.tipo());
+        }
         veiculo.trocarResponsaveis(buscarResponsaveis(request.responsaveisIds()));
         return VeiculoResponse.de(veiculo);
     }

@@ -103,6 +103,9 @@ public class VistoriaService {
         ItemVistoria item = itemRepository.findById(itemId)
                 .filter(ItemVistoria::isAtivo)
                 .orElseThrow(() -> invalida("Item de vistoria não encontrado ou inativo"));
+        if (!item.aplicaAo(vistoria.getVeiculo().getTipo())) {
+            throw invalida("Esse item não se aplica a esse tipo de veículo (" + item.getNome() + ")");
+        }
 
         String observacao = r.observacao() == null ? null : r.observacao().trim();
         if (r.estado() == EstadoItem.AVARIA && (observacao == null || observacao.isEmpty())) {
@@ -190,7 +193,7 @@ public class VistoriaService {
                 .collect(Collectors.toMap(VistoriaRegistro::getItemId, Function.identity()));
 
         for (ItemVistoria item : itemRepository.findAllByOrderByOrdemAscNomeAsc()) {
-            if (!item.isAtivo() || !item.isObrigatorio()) {
+            if (!item.isAtivo() || !item.isObrigatorio() || !item.aplicaAo(vistoria.getVeiculo().getTipo())) {
                 continue;
             }
             VistoriaRegistro registro = registros.get(item.getId());
@@ -218,7 +221,8 @@ public class VistoriaService {
         boolean aberta = vistoria.getStatus() == StatusVistoria.AGENDADA;
 
         List<ItemDaVistoria> itens = itemRepository.findAllByOrderByOrdemAscNomeAsc().stream()
-                .filter(i -> registros.containsKey(i.getId()) || (aberta && i.isAtivo()))
+                .filter(i -> registros.containsKey(i.getId())
+                        || (aberta && i.isAtivo() && i.aplicaAo(vistoria.getVeiculo().getTipo())))
                 .map(i -> {
                     VistoriaRegistro r = registros.get(i.getId());
                     return new ItemDaVistoria(i.getId(), i.getNome(), i.getCategoria(), i.isObrigatorio(),
